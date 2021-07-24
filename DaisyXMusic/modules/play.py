@@ -180,22 +180,22 @@ def updated_stats(chat, queue, vol=100):
 
 
 def r_ply(type_):
-    if type_ == "play":
+    if type_ == "mulai":
         pass
     else:
         pass
     mar = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("⏹", "leave"),
-                InlineKeyboardButton("⏸", "puse"),
-                InlineKeyboardButton("▶️", "resume"),
-                InlineKeyboardButton("⏭", "skip"),
+                InlineKeyboardButton("⏹", "Meninggalkan"),
+                InlineKeyboardButton("⏸", "Jeda"),
+                InlineKeyboardButton("▶️", "Lanjut"),
+                InlineKeyboardButton("⏭", "Melewati"),
             ],
             [
                 InlineKeyboardButton("Playlist 📖", "playlist"),
             ],
-            [InlineKeyboardButton("❌ Close", "cls")],
+            [InlineKeyboardButton("❌ Tutup", "cls")],
         ]
     )
     return mar
@@ -404,15 +404,15 @@ async def m_cb(b, cb):
         marr = InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton("⏹", "leave"),
-                    InlineKeyboardButton("⏸", "puse"),
-                    InlineKeyboardButton("▶️", "resume"),
+                    InlineKeyboardButton("⏹", "meninggalkan"),
+                    InlineKeyboardButton("⏸", "berhenti"),
+                    InlineKeyboardButton("▶️", "mulai"),
                     InlineKeyboardButton("⏭", "skip"),
                 ],
                 [
                     InlineKeyboardButton("Playlist 📖", "playlist"),
                 ],
-                [InlineKeyboardButton("❌ Close", "cls")],
+                [InlineKeyboardButton("❌ Tutup", "cls")],
             ]
         )
         await cb.message.edit(stats, reply_markup=marr)
@@ -625,9 +625,9 @@ async def play(_, message: Message):
 
             while j < 5:
                 toxxt += f"{emojilist[j]} **Title - [{results[j]['title']}](https://youtube.com{results[j]['url_suffix']})**\n"
-                toxxt += f" ╚ **Durasi** - {results[j]['duration']}\n"
-                toxxt += f" ╚ **Views** - {results[j]['views']}\n"
-                toxxt += f" ╚ **Channel** - {results[j]['channel']}\n\n"
+                toxxt += f" └ **Durasi** - {results[j]['duration']}\n"
+                toxxt += f" └ **Views** - {results[j]['views']}\n"
+                toxxt += f" └ **Channel** - {results[j]['channel']}\n\n"
 
                 j += 1            
             koyboard = InlineKeyboardMarkup(
@@ -720,7 +720,7 @@ async def play(_, message: Message):
         await message.reply_photo(
             photo="final.png",
             reply_markup=keyboard,
-            caption="▶️ **Playing** here the song requested by {} via Youtube Music 😜".format(
+            caption="▶️ **bermain** here the song requested by {} via Youtube Music 😜".format(
                 message.from_user.mention()
             ),
         )
