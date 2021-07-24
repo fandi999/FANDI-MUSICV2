@@ -18,54 +18,48 @@ import logging
 from DaisyXMusic.modules.msg import Messages as tr
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
-from DaisyXMusic.config import SOURCE_CODE,ASSISTANT_NAME,PROJECT_NAME,SUPPORT_GROUP,UPDATES_CHANNEL,BOT_USERNAME, OWNER
+from DaisyXMusic.config import SOURCE_CODE,ASSISTANT_NAME,PROJECT_NAME,SUPPORT_GROUP,UPDATES_CHANNEL,BOT_USERNAME
 logging.basicConfig(level=logging.INFO)
 
-@Client.on_message(
-    filters.command("start")
-    & filters.private
-    & ~ filters.edited
-)
-async def start_(client: Client, message: Message):
-    await message.reply_text(
-        f"""<b>Haii {message.from_user.first_name} saya adalah {PROJECT_NAME}\n
-Saya Adalah Bot Music Group, Yang dapat Memutar Lagu di Voice Chat Group Anda Dengan Mudah
-Saya Memiliki Banyak Fitur Seperti :
-• Memutar Musik.
-• Mendownload Lagu.
-• Mencari Lagu Yang ingin di Putar atau di Download.
-• Gunakan Perintah » /help « untuk Mengetahui Fitur Lengkapnya
-
-📌 Special Thanks To : {OWNER}
-
-Ingin Menambahkan Saya ke Grup Anda? Tambahkan Saya Ke Group Anda!
-DAN JANGAN GALAU YA NGENTODD!!!
-</b>""",
-
-# Edit Yang Seharusnya Lu Edit Aja:D
-# Tapi Jangan di Hapus Special Thanks To nya Yaaa :'D
-
+@Client.on_message(filters.private & filters.incoming & filters.command(['start']))
+def _start(client, message):
+    client.send_message(message.chat.id,
+        text=tr.START_MSG.format(message.from_user.first_name, message.from_user.id),
+        parse_mode="markdown",
         reply_markup=InlineKeyboardMarkup(
             [
                 [
                     InlineKeyboardButton(
-                        "➕ Tambahkan saya ke Grup Anda ➕", url=f"https://t.me/{BOT_USERNAME}?startgroup=true")],
+                        "➕ Add me to your Group 🙋‍♀️", url=f"https://t.me/{BOT_USERNAME}?startgroup=true")],
                 [
                     InlineKeyboardButton(
-                        "💬 Channel Quote", url=f"https://t.me/{UPDATES_CHANNEL}"), 
+                        "📲 Updates", url=f"https://t.me/{UPDATES_CHANNEL}"), 
                     InlineKeyboardButton(
-                        "🎈 Group Support", url=f"https://t.me/{SUPPORT_GROUP}")
+                        "💬 Support", url=f"https://t.me/{SUPPORT_GROUP}")
                 ],[
                     InlineKeyboardButton(
-                        "📌 GRUP MUTUALAN'", url=f"https://t.me/joinchat/xgUPNTiHr7UxNWE1")
-                ],[
-                    InlineKeyboardButton(
-                        "🎗️OWNER GANTENG", url=f"https://t.me/kemeemm")
+                        "🛠 Source Code 🛠", url=f"https://{SOURCE_CODE}")
                 ]
             ]
         ),
         reply_to_message_id=message.message_id
         )
+
+@Client.on_message(filters.command("start") & ~filters.private & ~filters.channel)
+async def gstart(_, message: Message):
+    await message.reply_text(
+        f"""**🔴 {PROJECT_NAME} is online**""",
+        reply_markup=InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton(
+                        "💬 Support Chat", url=f"https://t.me/{SUPPORT_GROUP}"
+                    )
+                ]
+            ]
+        ),
+    )
+
 
 @Client.on_message(filters.private & filters.incoming & filters.command(['help']))
 def _help(client, message):
@@ -94,88 +88,38 @@ def help_answer(client, callback_query):
 def map(pos):
     if(pos==1):
         button = [
-            [InlineKeyboardButton(text = 'Next »', callback_data = "help+2")]
+            [InlineKeyboardButton(text = '▶️', callback_data = "help+2")]
         ]
     elif(pos==len(tr.HELP_MSG)-1):
         url = f"https://t.me/{SUPPORT_GROUP}"
         button = [
-            [InlineKeyboardButton("➕ Tambahkan saya ke Grup Anda ➕", url=f"https://t.me/{BOT_USERNAME}?startgroup=true")],
-            [InlineKeyboardButton(text = '💬 Channel Updates', url=f"https://t.me/{UPDATES_CHANNEL}"),
-             InlineKeyboardButton(text = '🔰 Group Support', url=f"https://t.me/{SUPPORT_GROUP}")],
+            [InlineKeyboardButton("➕ Add me to your Group 🙋‍♀️", url=f"https://t.me/{BOT_USERNAME}?startgroup=true")],
+            [InlineKeyboardButton(text = '📲 Updates', url=f"https://t.me/{UPDATES_CHANNEL}"),
+             InlineKeyboardButton(text = '💬 Support', url=f"https://t.me/{SUPPORT_GROUP}")],
             [InlineKeyboardButton(text = '🛠 Source Code 🛠', url=f"https://{SOURCE_CODE}")],
-            [InlineKeyboardButton(text = '«', callback_data = f"help+{pos-1}")]
+            [InlineKeyboardButton(text = '◀️', callback_data = f"help+{pos-1}")]
         ]
     else:
         button = [
             [
-                InlineKeyboardButton(text = '«', callback_data = f"help+{pos-1}"),
-                InlineKeyboardButton(text = '»', callback_data = f"help+{pos+1}")
+                InlineKeyboardButton(text = '◀️', callback_data = f"help+{pos-1}"),
+                InlineKeyboardButton(text = '▶️', callback_data = f"help+{pos+1}")
             ],
         ]
     return button
 
-
-@Client.on_message(
-    filters.command("start")
-    & filters.group
-    & ~ filters.edited
-)
-async def start(client: Client, message: Message):
+@Client.on_message(filters.command("help") & ~filters.private & ~filters.channel)
+async def ghelp(_, message: Message):
     await message.reply_text(
-        "💁🏻‍♂️ **Apakah Anda ingin mencari Link YouTube?**",
-        reply_markup=InlineKeyboardMarkup(
-            [   
-                [    
-                    InlineKeyboardButton(
-                        "✅ Ya", switch_inline_query_current_chat=""
-                    ),
-                    InlineKeyboardButton(
-                        "❌ Tidak ", callback_data="close"
-                    )
-                ]
-            ]
-        )
-    )
-
-
-@Client.on_message(
-    filters.command("help")
-    & filters.group
-    & ~ filters.edited
-)
-async def help(client: Client, message: Message):
-    await message.reply_text(
-        """**Klik Tombol dibawah untuk Melihat Cara Menggunakan Bot**""",
+        f"""**🙋‍♀️ Hello there! I can play music in the voice chats of telegram groups & channels.**""",
         reply_markup=InlineKeyboardMarkup(
             [
                 [
                     InlineKeyboardButton(
-                        "📜 Cara Menggunakan BOT 📜", url="https://t.me/Vckyouuu/32"
+                        "🟡 Click here for help 🟡", url=f"https://t.me/{BOT_USERNAME}?start"
                     )
                 ]
             ]
         ),
-    )  
-
-
-@Client.on_message(
-    filters.command("reload")
-    & filters.group
-    & ~ filters.edited
-)
-async def reload(client: Client, message: Message):
-    await message.reply_text("""✅ Bot **berhasil dimulai ulang!**\n\n• **Daftar admin** telah **diperbarui**""",
-      reply_markup=InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                        "Group Support", url=f"https://t.me/infomusicfandi"
-                    ),
-                    InlineKeyboardButton(
-                        "Created By", url=f"https://t.me/kemeemm"
-                    )
-                ]
-            ]
-        )
-   )
+    )
 
