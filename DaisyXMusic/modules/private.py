@@ -29,7 +29,7 @@ logging.basicConfig(level=logging.INFO)
 async def start_(client: Client, message: Message):
     await message.reply_text(
         f"""<b>Haii {message.from_user.first_name} saya adalah {PROJECT_NAME}\n
-Saya Adalah Bot Music Group, Yang dapat Memutar Lagu di Voice Chat Group Anda Dengan Mudah
+Saya Adalah Bot Music fandi, Yang dapat Memutar Lagu di Voice Chat Group Anda Dengan Mudah
 Saya Memiliki Banyak Fitur Seperti :
 • Memutar Musik.
 • Mendownload Lagu.
