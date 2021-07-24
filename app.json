@@ -2,7 +2,7 @@
   "name": "FANDI-MUSICV2",
   "description": "Open-Source bot to play songs in your Telegram's Group Voice Chat. Powered by PyTgCalls.",
   "keywords": ["music", "voicechat", "telegram"],
-  "repository": "https://github.com/TeamofDaisyX/DaisyXMusic",
+  "repository": "https://github.com/fandi999/FANDI-MUSICV2",
   "stack": "container",
   "buildpacks": [
    {
